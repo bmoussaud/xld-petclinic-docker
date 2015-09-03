@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.xebialabs.xldeploy.demos</groupId>
+    <artifactId>xldeploy-petclinic-parent</artifactId>
+    <version>1.0</version>
+  </parent>
+  <artifactId>PetClinic</artifactId>
+  <version>4.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>PetClinic Docker Webapp</name>
+  <url>http://www.xebialabs.com</url>
+  <build>
+    <finalName>PetClinic</finalName>
+    <plugins>
+      <plugin>
+        <groupId>com.spotify</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>0.3.2</version>
+        <!-- http://filippodeluca.com/programming/2015/02/17/docker-maven-plugin -->
+        <executions>
+          <execution>
+            <id>build-docker-image</id>
+            <phase>package</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+
+            <configuration>
+              <imageName>petportal/petclinic</imageName>
+              <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
+              <resources>
+                <resource>
+                  <targetPath>/</targetPath>
+                  <directory>${project.build.directory}</directory>
+                  <include>${project.build.finalName}.war</include>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>push-docker-image</id>
+            <phase>install</phase>
+            <goals>
+              <goal>tag</goal>
+            </goals>
+
+            <configuration>
+              <image>petportal/petclinic</image>
+              <newName>localhost:5000/petportal/petclinic:${petclinic.image.version}</newName>
+              <pushImage>true</pushImage> <!-- We are also pushing this time -->
+              <tagInfoFile>${project.build.directory}/docker_image_info.json</tagInfoFile>
+            </configuration>
+          </execution>
+
+        </executions>
+
+      </plugin>
+
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context docBase="petclinic.war" unpackWAR="true" >
+  <Resource auth="Container" connectionProperties="" driverClassName="com.mysql.jdbc.Driver" initialSize="0" maxActive="8" maxIdle="8" maxWait="-1" minIdle="0" name="jdbc/petds" password="tiger" type="javax.sql.DataSource" url="jdbc:mysql://petbd/petclinic" username="UserDev" />
+</Context>
+

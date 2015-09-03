@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<udm.DeploymentPackage version="3.0-CD-20150903-153642" application="Docker/PetDocker">
+  <orchestrator>
+    <value>parallel-by-deployment-group</value>
+  </orchestrator>
+  <deployables>
+    <smoketest.HttpRequestTest name="smoke test">
+      <expectedResponseText>Home</expectedResponseText>
+      <links>
+        <value>petclinic:petclinic</value>
+      </links>
+      <url>http://petclinic:8080/petclinic</url>
+    </smoketest.HttpRequestTest>
+    <docker.Image name="petclinic">
+      <ports>
+        <docker.PortSpec name="petclinic/exposed-port">
+          <hostPort>8888</hostPort>
+          <containerPort>8080</containerPort>
+        </docker.PortSpec>
+      </ports>
+      <image>petportal/petclinic:3.1-20150309133633</image>
+      <links>
+        <docker.LinkSpec name="petclinic/petclinic-backend">
+          <alias>petclinic-backend</alias>
+        </docker.LinkSpec>
+      </links>
+      <volumes>
+        <docker.VolumeSpec name="petclinic/petclinic-config">
+          <containerPath>/usr/local/tomcat/conf/Catalina/localhost</containerPath>
+          <hostPath>/opt/docker/volumes/petclinic-config</hostPath>
+        </docker.VolumeSpec>
+      </volumes>
+    </docker.Image>
+    <docker.Image name="petclinic-backend">
+      <image>petportal/petclinic-backend:1.1-20150309133633</image>
+    </docker.Image>
+    <sql.SqlScripts name="sql" file="sql/sql" />
+  </deployables>
+</udm.DeploymentPackage>

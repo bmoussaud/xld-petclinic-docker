@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.xebialabs.xldeploy.demos</groupId>
+  <artifactId>xldeploy-petclinic-parent</artifactId>
+  <version>1.0</version>
+  <packaging>pom</packaging>
+  <name>PetClinic Docker XL Deploy</name>
+  <url>http://www.xebialabs.com</url>
+  <properties>
+    <maven.build.timestamp.format>yyyyddMMHHmmss</maven.build.timestamp.format>
+    <petclinic.build.date>${maven.build.timestamp}</petclinic.build.date>
+    <petclinic.image.version>3.1-${petclinic.build.date}</petclinic.image.version>
+    <petclinic-backend.image.version>1.1-${petclinic.build.date}</petclinic-backend.image.version>
+  </properties>
+
+  <modules>
+    <module>PetClinic</module>
+    <module>PetClinic-Backend</module>
+    <module>dar</module>
+  </modules>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>xebialabs-maven2</id>
+      <url>https://dist.xebialabs.com/public/maven2/</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>knopflerfish</id>
+      <url>http://www.knopflerfish.org/maven2</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+
+</project>

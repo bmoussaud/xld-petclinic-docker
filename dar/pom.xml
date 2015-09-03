@@ -1,0 +1,94 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.xebialabs.xldeploy.demos</groupId>
+    <artifactId>xldeploy-petclinic-parent</artifactId>
+    <version>1.0</version>
+  </parent>
+  <artifactId>PetPortal</artifactId>
+  <packaging>dar</packaging>
+  <version>3.0-CD-SNAPSHOT</version>
+  <name>PetClinic Docker XL Deploy DAR</name>
+  <url>http://www.xebialabs.com</url>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.xebialabs.xldeploy</groupId>
+        <artifactId>xldeploy-maven-plugin</artifactId>
+        <version>5.0.1</version>
+
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <id>deploy-id</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>deploy</goal>
+            </goals>
+          </execution>
+        </executions>
+
+        <configuration>
+          <serverAddress>localhost</serverAddress>
+          <applicationName>Docker/PetDocker</applicationName>
+          <deploymentPackageProperties>
+            <orchestrator>
+              <value>parallel-by-deployment-group</value>
+            </orchestrator>
+            <!--
+            <applicationDependencies>
+              <entry key="Infrastructure">1.1</entry>
+              <entry key="Cache">3.4</entry>
+            </applicationDependencies>
+            -->
+
+          </deploymentPackageProperties>
+
+          <orchestrator>parallel-by-deployment-group</orchestrator>
+          <deployables>
+
+            <smoketest.HttpRequestTest name="smoke test">
+              <url>http://petclinic:8080/petclinic</url>
+              <expectedResponseText>Home</expectedResponseText>
+              <links>
+                <value>petclinic:petclinic</value>
+              </links>
+            </smoketest.HttpRequestTest>
+
+            <docker.Image name="petclinic">
+              <image>petportal/petclinic:${petclinic.image.version}</image>
+              <ports>
+                <docker.PortSpec name="petclinic/exposed-port">
+                  <hostPort>8888</hostPort>
+                  <containerPort>8080</containerPort>
+                </docker.PortSpec>
+              </ports>
+              <links>
+                <docker.LinkSpec name="petclinic/petclinic-backend">
+                  <alias>petclinic-backend</alias>
+                </docker.LinkSpec>
+              </links>
+              <volumes>
+                <docker.VolumeSpec name="petclinic/petclinic-config">
+                  <hostPath>/opt/docker/volumes/petclinic-config</hostPath>
+                  <containerPath>/usr/local/tomcat/conf/Catalina/localhost</containerPath>
+                </docker.VolumeSpec>
+              </volumes>
+            </docker.Image>
+
+            <docker.Image name="petclinic-backend">
+              <image>petportal/petclinic-backend:${petclinic-backend.image.version}</image>
+            </docker.Image>
+
+            <sql.SqlScripts name="sql" location="sql"/>
+          </deployables>
+
+
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+
