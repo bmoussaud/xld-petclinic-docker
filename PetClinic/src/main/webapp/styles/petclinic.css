@@ -8,7 +8,7 @@ body,div,td {
 
 body {
 	background-color: #fff;
-	background-image: url(../images/banner-graphic.png);
+	background-image: url(../images/banner.jpg);
 	background-position: top center;
 	background-repeat: no-repeat;
 	text-align: center;
@@ -44,14 +44,14 @@ div {
 
 .footer td {color:#999999;}
 
-.footer a:link {color: #7db223;}
+.footer a:link {color: #1292c8;}
 
 	
 /* text styles */
 
 h1,h2,h3 {
 	font-family: Helvetica, sans-serif;
-	color: #7db223;
+	color: #1292c8;
 }
 
 h1 {
@@ -86,19 +86,19 @@ a {
 }
 
 a:link {
-	color: #7db223;
+	color: #1292c8;
 }
 
 a:hover {
-	color: #456314;
+	color: #558ec6;
 }
 
 a:active {
-	color: #7db223;
+	color: #558ec6;
 }
 
 a:visited {
-	color: #7db223;
+	color: #85a2c6;
 }
 
 ul {
