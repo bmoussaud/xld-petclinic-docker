@@ -20,7 +20,7 @@ String title =resource.getString("title");
 <img src="/petclinic/images/docker.jpg" align="right" style="position:relative;right:30px;">
 <p>&nbsp;</p>
 
-	<p>-- {{TITLE}} -- </p>
+	<p>-- Welcome -- </p>
 
 <ul>
   <li><a href="/petclinic/findOwners.jsp">Find owner</a></li>
@@ -32,7 +32,7 @@ String title =resource.getString("title");
 <table class="footer">
     <tr>
       <td><a href="/petclinic/index.html">Home</a></td>
-      <td align="right"><img src="/petclinic/images/springsource-logo.png"></td>
+
     </tr>
   </table>
 
