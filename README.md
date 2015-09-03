@@ -17,6 +17,7 @@ export DOCKER_MACHINE_NAME="docker-machine-virtualbox-1"
 
 To integrate with *XL Deploy*,
 * start XL Deploy version 5.0 with the xld-docker-plugin defined here: https://github.com/bmoussaud/xld-docker-plugin
-* run `mvn clean install`
+* run `mvn clean install`. This command `push`the images in the registry
+  using a timestamp for version and `import` in XL Deploy
 
 ![deployment with xld-docker-plugin](docker_deployment.png)
