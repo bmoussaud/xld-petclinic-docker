@@ -1,12 +1,25 @@
-*.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+# use glob syntax.
+syntax: glob
+target/
+.svn/
+.settings
+.classpath
+.project
+.metadata
+.pydevproject
+*.iml
+*.ipr
+*.iws
+*.log
+build-number.txt
+atlassian-ide-plugin.xml
+.gradle/
+.idea/
+out/
+build/
+classes/
+bin/
+s101plugin.state
+.DS_Store
+itest.properties
+!overthere-plugin/src/test/resources/itest.properties
