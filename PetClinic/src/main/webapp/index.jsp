@@ -1,17 +1,19 @@
 <%@ page language="java" import="java.util.*" %>
 <%
-try {
-ResourceBundle resource = ResourceBundle.getBundle("petclinic");
-String title =resource.getString("title");
-}catch (Exception e) {
-}
+  String title;
+  try {
+    ResourceBundle resource = ResourceBundle.getBundle("petclinic");
+    title =resource.getString("title");
+  }catch (Exception e) {
+    title = "NOT FOUND IN RESOURCE BUNDLE";
+  }
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <link rel="stylesheet" href="styles/petclinic.css" type="text/css"/>
-  <title>PetDocker 1.0 :: a Spring Framework demonstration</title>
+  <title>PetDocker</title>
 </head>
 
 <body>
@@ -20,7 +22,7 @@ String title =resource.getString("title");
 <img src="/petclinic/images/docker.jpg" align="right" style="position:relative;right:30px;">
 <p>&nbsp;</p>
 
-	<p>-- Welcome -- </p>
+	<p>-- Welcome [<%=title%>] !-- </p>
 
 <ul>
   <li><a href="/petclinic/findOwners.jsp">Find owner</a></li>

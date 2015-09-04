@@ -67,8 +67,8 @@
                             </links>
                             <volumes>
                                 <docker.VolumeSpec name="petclinic/petclinic-config">
-                                    <hostPath>/opt/docker/volumes/petclinic-config</hostPath>
-                                    <containerPath>/usr/local/tomcat/conf/Catalina/localhost</containerPath>
+                                    <hostPath>{{HOST_TARGET_PATH}}</hostPath>
+                                    <containerPath>/application/properties</containerPath>
                                 </docker.VolumeSpec>
                             </volumes>
                         </docker.Image>
@@ -78,7 +78,14 @@
                             <registryHost>{{PROJECT_REGISTRY_HOST}}</registryHost>
                         </docker.Image>
 
+                        <!--
                         <sql.SqlScripts name="sql" location="sql"/>
+                        -->
+
+                        <docker.File name="config" location="config/petclinic.properties">
+                            <targetPath>{{HOST_TARGET_PATH}}/petclinic.properties</targetPath>
+                        </docker.File>
+
                     </deployables>
 
 
