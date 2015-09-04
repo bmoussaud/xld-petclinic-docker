@@ -23,9 +23,9 @@
                 <executions>
                     <execution>
                         <id>deploy-id</id>
-                        <phase>pre-integration-test</phase>
+                        <phase>install</phase>
                         <goals>
-                            <goal>deploy</goal>
+                            <goal>import</goal>
                         </goals>
                     </execution>
                 </executions>
