@@ -71,6 +71,11 @@
                                     <containerPath>/application/properties</containerPath>
                                 </docker.VolumeSpec>
                             </volumes>
+                            <variables>
+                                <docker.EnvironmentVariableSpec name="loglevel">
+                                    <value>{{LOGLEVEL}}</value>
+                                </docker.EnvironmentVariableSpec>
+                            </variables>
                         </docker.Image>
 
                         <docker.Image name="petclinic-backend">
