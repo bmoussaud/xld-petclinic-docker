@@ -44,7 +44,7 @@
 
                         <smoketest.HttpRequestTest name="smoke test">
                             <url>http://petclinic:8080/petclinic</url>
-                            <expectedResponseText>Home</expectedResponseText>
+                            <expectedResponseText>{{title}}</expectedResponseText>
                             <links>
                                 <value>petclinic:petclinic</value>
                             </links>
