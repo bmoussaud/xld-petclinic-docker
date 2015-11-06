@@ -1,5 +1,4 @@
 <%@ page language="java" import="java.util.ResourceBundle" %>
-<%@ page import="java.net.InetAddress" %>
 <%
     String title;
     try {
@@ -9,14 +8,10 @@
         title = "NOT FOUND IN RESOURCE BUNDLE";
     }
 
-    String ip;
     String hostname;
     try {
-        InetAddress address = InetAddress.getByName("petclinic");
-        ip = address.getHostAddress();
         hostname = System.getenv("HOSTNAME");
-    }catch (Exception e) {
-        ip = "0.0.0.0";
+    } catch (Exception e) {
         hostname = "docker_host_not_found";
     }
 
@@ -48,7 +43,6 @@
     <table class="footer">
         <tr>
             <td><a href="/petclinic/index.html">Home</a></td>
-            <td>[IP:<%=ip%>]</td>
             <td>[Hostname:<%=hostname%>]</td>
         </tr>
     </table>
