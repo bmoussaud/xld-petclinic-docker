@@ -50,6 +50,11 @@
                             </links>
                         </smoketest.HttpRequestTest>
 
+                        <smoketest.HttpRequestTest name="smoke test - ha">
+                            <url>http://{{HOST_ADDRESS}}/petclinic/</url>
+                            <expectedResponseText>{{title}}</expectedResponseText>
+                        </smoketest.HttpRequestTest>
+
                         <docker.Image name="petclinic">
                             <image>petportal/petclinic:${petclinic.image.version}</image>
                             <registryHost>{{PROJECT_REGISTRY_HOST}}</registryHost>
