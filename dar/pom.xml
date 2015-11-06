@@ -72,7 +72,7 @@
                                 </docker.VolumeSpec>
                             </volumes>
                             <variables>
-                                <docker.EnvironmentVariableSpec name="loglevel">
+                                <docker.EnvironmentVariableSpec name="petclinic/loglevel">
                                     <value>{{LOGLEVEL}}</value>
                                 </docker.EnvironmentVariableSpec>
                             </variables>
@@ -83,9 +83,29 @@
                             <registryHost>{{PROJECT_REGISTRY_HOST}}</registryHost>
                         </docker.Image>
 
+                        <docker.Image name="ha-proxy">
+                            <image>eeacms/haproxy:latest</image>
+                            <ports>
+                                <docker.PortSpec name="ha-proxy/web">
+                                    <hostPort>80</hostPort>
+                                    <containerPort>80</containerPort>
+                                </docker.PortSpec>
+                                <docker.PortSpec name="ha-proxy/admin">
+                                    <hostPort>1936</hostPort>
+                                    <containerPort>1936</containerPort>
+                                </docker.PortSpec>
+                            </ports>
+                            <variables>
+                                <docker.EnvironmentVariableSpec name="ha-proxy/BACKENDS">
+                                    <value>{{HOST_ADDRESS}}:8888</value>
+                                </docker.EnvironmentVariableSpec>
+                            </variables>
+
+                        </docker.Image>
+
                         <sql.SqlScripts name="sql" location="sql"/>
 
-                        <docker.File name="config" location="config/petclinic.properties">
+                        <docker.File name="petclinic.properties" location="config/petclinic.properties">
                             <targetPath>{{HOST_TARGET_PATH}}/petclinic.properties</targetPath>
                         </docker.File>
 
