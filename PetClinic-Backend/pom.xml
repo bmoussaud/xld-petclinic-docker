@@ -1,86 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.xebialabs.xldeploy.demos</groupId>
-    <artifactId>xldeploy-petclinic-parent</artifactId>
-    <version>1.0</version>
-  </parent>
-  <artifactId>PetClinic-Backend</artifactId>
-  <version>1.2</version>
-  <packaging>war</packaging>
-  <name>PetClinic-Backend Docker Webapp</name>
-  <url>http://maven.apache.org</url>
-  <build>
-    <finalName>PetClinic-Backend</finalName>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-        <version>2.1.1</version>
-        <configuration>
-          <archive>
-            <addMavenDescriptor>false</addMavenDescriptor>
-          </archive>
-        </configuration>
-      </plugin>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.xebialabs.xldeploy.demos</groupId>
+        <artifactId>xldeploy-petclinic-parent</artifactId>
+        <version>1.0</version>
+    </parent>
+    <artifactId>PetClinic-Backend</artifactId>
+    <version>1.2</version>
+    <packaging>war</packaging>
+    <name>PetClinic-Backend Docker Webapp</name>
+    <url>http://maven.apache.org</url>
+    <build>
+        <finalName>PetClinic-Backend</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
+                </configuration>
+            </plugin>
 
-      <plugin>
-        <groupId>com.spotify</groupId>
-        <artifactId>docker-maven-plugin</artifactId>
-        <version>0.3.2</version>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.3.2</version>
 
-        <!-- http://filippodeluca.com/programming/2015/02/17/docker-maven-plugin -->
-        <executions>
-          <execution>
-            <id>build-docker-image</id>
-            <phase>package</phase>
-            <goals>
-              <goal>build</goal>
-            </goals>
+                <!-- http://filippodeluca.com/programming/2015/02/17/docker-maven-plugin -->
+                <executions>
+                    <execution>
+                        <id>build-docker-image</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
 
-            <configuration>
-              <imageName>petportal/petclinic-backend</imageName>
-              <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
-              <resources>
-                <resource>
-                  <targetPath>/</targetPath>
-                  <directory>${project.build.directory}</directory>
-                  <include>${project.build.finalName}.war</include>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
+                        <configuration>
+                            <imageName>petportal/petclinic-backend</imageName>
+                            <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
+                            <resources>
+                                <resource>
+                                    <targetPath>/</targetPath>
+                                    <directory>${project.build.directory}</directory>
+                                    <include>${project.build.finalName}.war</include>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
 
-          <execution>
-            <id>push-docker-image</id>
-            <phase>install</phase>
-            <goals>
-              <goal>tag</goal>
-            </goals>
+                    <execution>
+                        <id>push-docker-image</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>tag</goal>
+                        </goals>
 
-            <configuration>
-              <image>petportal/petclinic-backend</image>
-              <newName>localhost:5000/petportal/petclinic-backend:${petclinic-backend.image.version}</newName>
-              <pushImage>true</pushImage> <!-- We are also pushing this time -->
-              <tagInfoFile>${project.build.directory}/docker_image_info.json</tagInfoFile>
-            </configuration>
-          </execution>
+                        <configuration>
+                            <image>petportal/petclinic-backend</image>
+                            <newName>localhost:5000/petportal/petclinic-backend:${petclinic-backend.image.version}</newName>
+                            <pushImage>true</pushImage>
+                            <!-- We are also pushing this time -->
+                            <tagInfoFile>${project.build.directory}/docker_image_info.json</tagInfoFile>
+                        </configuration>
+                    </execution>
 
-        </executions>
+                </executions>
 
-      </plugin>
+            </plugin>
 
 
-    </plugins>
-  </build>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

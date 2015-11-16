@@ -41,13 +41,10 @@
 
                     <orchestrator>parallel-by-deployment-group</orchestrator>
                     <deployables>
-
                         <smoketest.HttpRequestTest name="smoke test">
-                            <url>http://petclinic:8080/petclinic</url>
+                            <!-- <url>http://petclinic:8080/petclinic</url> -->
+                            <url>http://{{HOST_ADDRESS}}:{{HOST_PORT}}/petclinic/</url>
                             <expectedResponseText>{{title}}</expectedResponseText>
-                            <links>
-                                <value>petclinic:petclinic</value>
-                            </links>
                         </smoketest.HttpRequestTest>
 
                         <smoketest.HttpRequestTest name="smoke test - ha">
@@ -61,7 +58,7 @@
 
                             <ports>
                                 <docker.PortSpec name="petclinic/exposed-port">
-                                    <hostPort>8888</hostPort>
+                                    <hostPort>{{HOST_PORT}}</hostPort>
                                     <containerPort>8080</containerPort>
                                 </docker.PortSpec>
                             </ports>
@@ -101,7 +98,7 @@
                             </ports>
                             <variables>
                                 <docker.EnvironmentVariableSpec name="ha-proxy/BACKENDS">
-                                    <value>{{HOST_ADDRESS}}:8888</value>
+                                    <value>{{HOST_ADDRESS}}:{{HOST_PORT}}</value>
                                 </docker.EnvironmentVariableSpec>
                             </variables>
 
