@@ -72,7 +72,6 @@
                             </links>
                             <volumes>
                                 <docker.VolumeSpec name="petclinic/petclinic-config">
-                                    <hostPath>{{HOST_TARGET_PATH}}</hostPath>
                                     <containerPath>/application/properties</containerPath>
                                 </docker.VolumeSpec>
                             </volumes>
@@ -111,7 +110,9 @@
                         <sql.SqlScripts name="sql" location="sql"/>
 
                         <docker.File name="petclinic.properties" location="config/petclinic.properties">
-                            <targetPath>{{HOST_TARGET_PATH}}/petclinic.properties</targetPath>
+                            <volumeName>petclinic-config</volumeName>
+                            <containerName>petclinic</containerName>
+                            <containerPath>/application/properties</containerPath>
                         </docker.File>
 
                     </deployables>
