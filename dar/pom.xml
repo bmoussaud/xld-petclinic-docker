@@ -106,11 +106,11 @@
 
                         <sql.SqlScripts name="sql" location="sql"/>
 
-                        <docker.Volume name="petclinic.config" location="config">
+                        <docker.Folder name="petclinic.config" location="config/">
                             <volumeName>petclinic-config</volumeName>
                             <containerName>petclinic</containerName>
                             <containerPath>/application/properties</containerPath>
-                        </docker.Volume>
+                        </docker.Folder>
 
                     </deployables>
 
