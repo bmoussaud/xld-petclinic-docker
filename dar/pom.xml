@@ -85,7 +85,7 @@
                         </docker.Image>
 
                         <docker.Image name="ha-proxy">
-                            <image>eeacms/haproxy:latest</image>
+                            <image>eeacms/haproxy:1.5</image>
                             <ports>
                                 <docker.PortSpec name="ha-proxy/web">
                                     <hostPort>80</hostPort>
