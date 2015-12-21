@@ -43,30 +43,28 @@
                     <deployables>
                         <smoketest.HttpRequestTest name="smoke test">
                             <!-- <url>http://petclinic:8080/petclinic</url> -->
-                            <url>http://{{HOST_ADDRESS}}:{{HOST_PORT}}/petclinic/</url>
+                            <url>http://{{BACK_HOST_ADDRESS}}:{{HOST_PORT}}/petclinic/</url>
                             <expectedResponseText>{{title}}</expectedResponseText>
                         </smoketest.HttpRequestTest>
 
                         <smoketest.HttpRequestTest name="smoke test - ha">
-                            <url>http://{{HOST_ADDRESS}}/petclinic/</url>
+                            <url>http://{{FRONT_HOST_ADDRESS}}/petclinic/</url>
                             <expectedResponseText>{{title}}</expectedResponseText>
                         </smoketest.HttpRequestTest>
 
                         <docker.Image name="petclinic">
                             <image>petportal/petclinic:${petclinic.image.version}</image>
                             <registryHost>{{PROJECT_REGISTRY_HOST}}</registryHost>
-
+                            <network>petnetwork</network>
+                            <labels>
+                                <value>zone=back</value>
+                            </labels>
                             <ports>
                                 <docker.PortSpec name="petclinic/exposed-port">
                                     <hostPort>{{HOST_PORT}}</hostPort>
                                     <containerPort>8080</containerPort>
                                 </docker.PortSpec>
                             </ports>
-                            <links>
-                                <docker.LinkSpec name="petclinic/petclinic-backend">
-                                    <alias>petclinic-backend</alias>
-                                </docker.LinkSpec>
-                            </links>
                             <volumes>
                                 <docker.VolumeSpec name="petclinic/petclinic-config">
                                     <containerPath>/application/properties</containerPath>
@@ -82,10 +80,18 @@
                         <docker.Image name="petclinic-backend">
                             <image>petportal/petclinic-backend:${petclinic-backend.image.version}</image>
                             <registryHost>{{PROJECT_REGISTRY_HOST}}</registryHost>
+                            <network>petnetwork</network>
+                            <labels>
+                                <value>zone=back</value>
+                            </labels>
                         </docker.Image>
 
                         <docker.Image name="ha-proxy">
                             <image>eeacms/haproxy:1.5</image>
+                            <network>petnetwork</network>
+                            <labels>
+                                <value>zone=front</value>
+                            </labels>
                             <ports>
                                 <docker.PortSpec name="ha-proxy/web">
                                     <hostPort>80</hostPort>
@@ -98,7 +104,7 @@
                             </ports>
                             <variables>
                                 <docker.EnvironmentVariableSpec name="ha-proxy/BACKENDS">
-                                    <value>{{HOST_ADDRESS}}:{{HOST_PORT}}</value>
+                                    <value>petclinic:8080</value>
                                 </docker.EnvironmentVariableSpec>
                             </variables>
 
@@ -111,6 +117,10 @@
                             <containerName>petclinic</containerName>
                             <containerPath>/application/properties</containerPath>
                         </docker.Folder>
+
+                        <docker.NetworkSpec name="petnetwork">
+                            <driver>overlay</driver>
+                        </docker.NetworkSpec>
 
                     </deployables>
 
