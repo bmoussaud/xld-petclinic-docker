@@ -42,7 +42,6 @@
                     <orchestrator>parallel-by-deployment-group</orchestrator>
                     <deployables>
                         <smoketest.HttpRequestTest name="smoke test">
-                            <!-- <url>http://petclinic:8080/petclinic</url> -->
                             <url>http://{{BACK_HOST_ADDRESS}}:{{HOST_PORT}}/petclinic/</url>
                             <expectedResponseText>{{title}}</expectedResponseText>
                         </smoketest.HttpRequestTest>
