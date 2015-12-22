@@ -74,6 +74,10 @@
                                 <docker.EnvironmentVariableSpec name="petclinic/loglevel">
                                     <value>{{LOGLEVEL}}</value>
                                 </docker.EnvironmentVariableSpec>
+                                <docker.EnvironmentVariableSpec name="petclinic/constraint">
+                                    <value>zone==back</value>
+                                    <separator>:</separator>
+                                </docker.EnvironmentVariableSpec>
                             </variables>
                         </docker.Image>
 
@@ -84,6 +88,12 @@
                             <labels>
                                 <value>zone=back</value>
                             </labels>
+                            <variables>
+                                <docker.EnvironmentVariableSpec name="petclinic-backend/constraint">
+                                    <value>zone==back</value>
+                                    <separator>:</separator>
+                                </docker.EnvironmentVariableSpec>
+                            </variables>
                         </docker.Image>
 
                         <docker.Image name="ha-proxy">
@@ -105,6 +115,10 @@
                             <variables>
                                 <docker.EnvironmentVariableSpec name="ha-proxy/BACKENDS">
                                     <value>petclinic:8080</value>
+                                </docker.EnvironmentVariableSpec>
+                                <docker.EnvironmentVariableSpec name="ha-proxy/constraint">
+                                    <value>zone==front</value>
+                                    <separator>:</separator>
                                 </docker.EnvironmentVariableSpec>
                             </variables>
 
