@@ -58,6 +58,9 @@
                             <labels>
                                 <value>zone=back</value>
                             </labels>
+                            <dependencies>
+                                <value>petclinic-backend</value>
+                            </dependencies>
                             <ports>
                                 <docker.PortSpec name="petclinic/exposed-port">
                                     <hostPort>{{HOST_PORT}}</hostPort>
@@ -101,6 +104,9 @@
                             <labels>
                                 <value>zone=front</value>
                             </labels>
+                            <dependencies>
+                                <value>petclinic</value>
+                            </dependencies>
                             <ports>
                                 <docker.PortSpec name="ha-proxy/web">
                                     <hostPort>80</hostPort>
