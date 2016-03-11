@@ -69,7 +69,8 @@
                             </ports>
                             <volumes>
                                 <docker.VolumeSpec name="petclinic/petclinic-config">
-                                    <containerPath>/application/properties</containerPath>
+                                    <source>petclinic-config</source>
+                                    <destination>/application/properties</destination>
                                 </docker.VolumeSpec>
                             </volumes>
                             <variables>
