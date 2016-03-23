@@ -140,7 +140,7 @@
                         </docker.Folder>
 
                         <docker.NetworkSpec name="petnetwork">
-                            <driver>overlay</driver>
+                            <driver>{{petnetwork}}</driver>
                         </docker.NetworkSpec>
 
                     </deployables>
