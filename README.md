@@ -78,3 +78,5 @@ The XL Deploy manifest file for the application:
 
 ```
 
+Use the following dictionary to configure your deployed application (fake values!)
+![configure petdocker](petdocker_dictionary.png)
