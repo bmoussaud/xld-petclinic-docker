@@ -25,57 +25,126 @@ To integrate with *XL Deploy*,
 
 The XL Deploy manifest file for the application:
 
-```
-<?xml version="1.0" encoding="UTF-8"?>
-<udm.DeploymentPackage version="3.0-CD-20150909-075831" application="Docker/PetDocker">
+``` 
+
+<udm.DeploymentPackage version="3.0-CD-20160614-144331" application="PetDocker">
   <orchestrator>
     <value>parallel-by-deployment-group</value>
   </orchestrator>
+  <application />
   <deployables>
-    <smoketest.HttpRequestTest name="smoke test">
+    <docker.NetworkSpec name="petnetwork">
+      <tags />
+      <driver>{{petnetwork}}</driver>
+    </docker.NetworkSpec>
+    <docker.Folder name="petclinic.config" file="petclinic.config/config">
+      <tags />
+      <volumeName>petclinic-config</volumeName>
+      <containerName>petclinic</containerName>
+      <containerPath>/application/properties</containerPath>
+    </docker.Folder>
+    <smoketest.HttpRequestTest name="smoke test - ha">
+      <tags />
+      <url>http://{{FRONT_HOST_ADDRESS}}/petclinic/</url>
       <expectedResponseText>{{title}}</expectedResponseText>
-      <links>
-        <value>petclinic:petclinic</value>
-      </links>
-      <url>http://petclinic:8080/petclinic</url>
+      <headers />
     </smoketest.HttpRequestTest>
+    <docker.Image name="ha-proxy">
+      <tags />
+      <image>eeacms/haproxy:1.5</image>
+      <labels>
+        <value>zone=front</value>
+      </labels>
+      <network>petnetwork</network>
+      <dependencies>
+        <value>petclinic</value>
+      </dependencies>
+      <volumesFrom />
+      <registryHost>{{PROJECT_REGISTRY_HOST}}</registryHost>
+      <ports>
+        <docker.PortSpec name="ha-proxy/admin">
+          <hostPort>1936</hostPort>
+          <containerPort>1936</containerPort>
+        </docker.PortSpec>
+        <docker.PortSpec name="ha-proxy/web">
+          <hostPort>80</hostPort>
+          <containerPort>80</containerPort>
+        </docker.PortSpec>
+      </ports>
+      <links />
+      <volumes />
+      <variables>
+        <docker.EnvironmentVariableSpec name="ha-proxy/constraint">
+          <value>zone==front</value>
+          <separator>:</separator>
+        </docker.EnvironmentVariableSpec>
+        <docker.EnvironmentVariableSpec name="ha-proxy/BACKENDS">
+          <value>petclinic:8080</value>
+        </docker.EnvironmentVariableSpec>
+      </variables>
+    </docker.Image>
+    <sql.SqlScripts name="sql" file="sql/sql">
+      <tags />
+      <scanPlaceholders>true</scanPlaceholders>
+    </sql.SqlScripts>
+    <smoketest.HttpRequestTest name="smoke test">
+      <tags />
+      <url>http://{{BACK_HOST_ADDRESS}}:{{HOST_PORT}}/petclinic/</url>
+      <expectedResponseText>{{title}}</expectedResponseText>
+      <headers />
+    </smoketest.HttpRequestTest>
+    <docker.Image name="petclinic-backend">
+      <tags />
+      <image>petportal/petclinic-backend:1.1-20161406124321</image>
+      <labels>
+        <value>zone=back</value>
+      </labels>
+      <network>petnetwork</network>
+      <registryHost>{{PROJECT_REGISTRY_HOST}}</registryHost>
+      <variables>
+        <docker.EnvironmentVariableSpec name="petclinic-backend/constraint">
+          <value>zone==back</value>
+          <separator>:</separator>
+        </docker.EnvironmentVariableSpec>
+      </variables>
+    </docker.Image>
     <docker.Image name="petclinic">
+      <tags />
+      <image>petportal/petclinic:3.1-20161406124321</image>
+      <labels>
+        <value>zone=back</value>
+      </labels>
+      <network>petnetwork</network>
+      <dependencies>
+        <value>petclinic-backend</value>
+      </dependencies>
+      <registryHost>{{PROJECT_REGISTRY_HOST}}</registryHost>
       <ports>
         <docker.PortSpec name="petclinic/exposed-port">
-          <hostPort>8888</hostPort>
+          <hostPort>{{HOST_PORT}}</hostPort>
           <containerPort>8080</containerPort>
         </docker.PortSpec>
       </ports>
-      <registryHost>{{PROJECT_REGISTRY_HOST}}</registryHost>
-      <image>petportal/petclinic:3.1-20150909055821</image>
-      <links>
-        <docker.LinkSpec name="petclinic/petclinic-backend">
-          <alias>petclinic-backend</alias>
-        </docker.LinkSpec>
-      </links>
+      <links />
       <volumes>
         <docker.VolumeSpec name="petclinic/petclinic-config">
-          <containerPath>/application/properties</containerPath>
-          <hostPath>{{HOST_TARGET_PATH}}</hostPath>
+          <source>petclinic-config</source>
+          <destination>/application/properties</destination>
         </docker.VolumeSpec>
       </volumes>
       <variables>
-        <docker.EnvironmentVariableSpec name="loglevel">
+        <docker.EnvironmentVariableSpec name="petclinic/constraint">
+          <value>zone==back</value>
+          <separator>:</separator>
+        </docker.EnvironmentVariableSpec>
+        <docker.EnvironmentVariableSpec name="petclinic/loglevel">
           <value>{{LOGLEVEL}}</value>
         </docker.EnvironmentVariableSpec>
       </variables>
     </docker.Image>
-    <docker.Image name="petclinic-backend">
-      <registryHost>{{PROJECT_REGISTRY_HOST}}</registryHost>
-      <image>petportal/petclinic-backend:1.1-20150909055821</image>
-    </docker.Image>
-    <sql.SqlScripts name="sql" file="sql/sql" />
-    <docker.File name="config" file="config/petclinic.properties">
-      <targetPath>{{HOST_TARGET_PATH}}/petclinic.properties</targetPath>
-    </docker.File>
   </deployables>
+  <applicationDependencies />
 </udm.DeploymentPackage>
-
 ```
 
 Use the following dictionary to configure your deployed application (fake values!)
