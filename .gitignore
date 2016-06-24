@@ -24,3 +24,4 @@ s101plugin.state
 itest.properties
 !overthere-plugin/src/test/resources/itest.properties
 */target/*
+xl-deploy-5.5.1-server/
