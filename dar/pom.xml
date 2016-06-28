@@ -9,7 +9,7 @@
     </parent>
     <artifactId>PetPortal</artifactId>
     <packaging>dar</packaging>
-    <version>3.0-CD-SNAPSHOT</version>
+    <version>3.1-SNAPSHOT</version>
     <name>PetClinic Docker XL Deploy DAR</name>
     <url>http://www.xebialabs.com</url>
     <build>
@@ -100,7 +100,7 @@
                         </docker.Image>
 
                         <docker.Image name="ha-proxy">
-                            <image>eeacms/haproxy:1.5</image>
+                            <image>eeacms/haproxy:1.6</image>
                             <registryHost>{{PROJECT_REGISTRY_HOST}}</registryHost>
                             <network>petnetwork</network>
                             <labels>
@@ -112,7 +112,7 @@
                             <ports>
                                 <docker.PortSpec name="ha-proxy/web">
                                     <hostPort>80</hostPort>
-                                    <containerPort>80</containerPort>
+                                    <containerPort>5000</containerPort>
                                 </docker.PortSpec>
                                 <docker.PortSpec name="ha-proxy/admin">
                                     <hostPort>1936</hostPort>
