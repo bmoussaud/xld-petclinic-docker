@@ -1,4 +1,4 @@
-FROM tomcat:8.0
+FROM tomcat:8.0.37-jre8-alpine
 
 RUN  mkdir -p /usr/local/tomcat/conf/Catalina/localhost
 COPY petclinic.xml  /usr/local/tomcat/conf/Catalina/localhost/petclinic.xml
