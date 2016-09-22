@@ -26,32 +26,14 @@ To integrate with *XL Deploy*,
 The XL Deploy manifest file for the application:
 
 ``` 
-
-<udm.DeploymentPackage version="3.0-CD-20160614-144331" application="PetDocker">
+<udm.DeploymentPackage version="3.1-20160921-160321" application="PetDocker">
   <orchestrator>
     <value>parallel-by-deployment-group</value>
   </orchestrator>
-  <application />
   <deployables>
-    <docker.NetworkSpec name="petnetwork">
-      <tags />
-      <driver>{{petnetwork}}</driver>
-    </docker.NetworkSpec>
-    <docker.Folder name="petclinic.config" file="petclinic.config/config">
-      <tags />
-      <volumeName>petclinic-config</volumeName>
-      <containerName>petclinic</containerName>
-      <containerPath>/application/properties</containerPath>
-    </docker.Folder>
-    <smoketest.HttpRequestTest name="smoke test - ha">
-      <tags />
-      <url>http://{{FRONT_HOST_ADDRESS}}/petclinic/</url>
-      <expectedResponseText>{{title}}</expectedResponseText>
-      <headers />
-    </smoketest.HttpRequestTest>
     <docker.Image name="ha-proxy">
       <tags />
-      <image>eeacms/haproxy:1.5</image>
+      <image>eeacms/haproxy:1.6</image>
       <labels>
         <value>zone=front</value>
       </labels>
@@ -68,39 +50,38 @@ The XL Deploy manifest file for the application:
         </docker.PortSpec>
         <docker.PortSpec name="ha-proxy/web">
           <hostPort>80</hostPort>
-          <containerPort>80</containerPort>
+          <containerPort>5000</containerPort>
         </docker.PortSpec>
       </ports>
       <links />
       <volumes />
       <variables>
+        <docker.EnvironmentVariableSpec name="ha-proxy/BACKENDS">
+          <value>petclinic:8080</value>
+        </docker.EnvironmentVariableSpec>
         <docker.EnvironmentVariableSpec name="ha-proxy/constraint">
           <value>zone==front</value>
           <separator>:</separator>
         </docker.EnvironmentVariableSpec>
-        <docker.EnvironmentVariableSpec name="ha-proxy/BACKENDS">
-          <value>petclinic:8080</value>
-        </docker.EnvironmentVariableSpec>
       </variables>
     </docker.Image>
-    <sql.SqlScripts name="sql" file="sql/sql">
-      <tags />
-      <scanPlaceholders>true</scanPlaceholders>
-    </sql.SqlScripts>
-    <smoketest.HttpRequestTest name="smoke test">
-      <tags />
-      <url>http://{{BACK_HOST_ADDRESS}}:{{HOST_PORT}}/petclinic/</url>
+    <smoketest.HttpRequestTest name="smoke test - ha">
+      <url>http://{{FRONT_HOST_ADDRESS}}/petclinic/</url>
       <expectedResponseText>{{title}}</expectedResponseText>
       <headers />
     </smoketest.HttpRequestTest>
     <docker.Image name="petclinic-backend">
-      <tags />
-      <image>petportal/petclinic-backend:1.1-20161406124321</image>
+      <image>bmoussaud/petclinic-backend:1.1-20162109140249</image>
       <labels>
         <value>zone=back</value>
       </labels>
       <network>petnetwork</network>
+      <dependencies />
+      <volumesFrom />
       <registryHost>{{PROJECT_REGISTRY_HOST}}</registryHost>
+      <ports />
+      <links />
+      <volumes />
       <variables>
         <docker.EnvironmentVariableSpec name="petclinic-backend/constraint">
           <value>zone==back</value>
@@ -108,9 +89,25 @@ The XL Deploy manifest file for the application:
         </docker.EnvironmentVariableSpec>
       </variables>
     </docker.Image>
-    <docker.Image name="petclinic">
+    <smoketest.HttpRequestTest name="smoke test">
       <tags />
-      <image>petportal/petclinic:3.1-20161406124321</image>
+      <url>http://{{BACK_HOST_ADDRESS}}:{{HOST_PORT}}/petclinic/</url>
+      <expectedResponseText>{{title}}</expectedResponseText>
+      <headers />
+    </smoketest.HttpRequestTest>
+    <sql.SqlScripts name="sql" file="sql/sql">
+      <scanPlaceholders>true</scanPlaceholders>
+    </sql.SqlScripts>
+    <docker.Folder name="petclinic.config" file="petclinic.config/config">
+      <volumeName>petclinic-config</volumeName>
+      <containerName>petclinic</containerName>
+      <containerPath>/application/properties</containerPath>
+    </docker.Folder>
+    <docker.NetworkSpec name="petnetwork">
+      <driver>{{petnetwork}}</driver>
+    </docker.NetworkSpec>
+    <docker.Image name="petclinic">
+      <image>bmoussaud/petclinic:3.1-20162109140249</image>
       <labels>
         <value>zone=back</value>
       </labels>
@@ -145,6 +142,7 @@ The XL Deploy manifest file for the application:
   </deployables>
   <applicationDependencies />
 </udm.DeploymentPackage>
+
 ```
 
 Use the following dictionary to configure your deployed application (fake values!)
