@@ -52,7 +52,7 @@
                         </smoketest.HttpRequestTest>
 
                         <docker.Image name="petclinic">
-                            <image>petportal/petclinic:${petclinic.image.version}</image>
+                            <image>bmoussaud/petclinic:${petclinic.image.version}</image>
                             <registryHost>{{PROJECT_REGISTRY_HOST}}</registryHost>
                             <network>petnetwork</network>
                             <labels>
@@ -85,7 +85,7 @@
                         </docker.Image>
 
                         <docker.Image name="petclinic-backend">
-                            <image>petportal/petclinic-backend:${petclinic-backend.image.version}</image>
+                            <image>bmoussaud/petclinic-backend:${petclinic-backend.image.version}</image>
                             <registryHost>{{PROJECT_REGISTRY_HOST}}</registryHost>
                             <network>petnetwork</network>
                             <labels>

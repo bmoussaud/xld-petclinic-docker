@@ -41,7 +41,7 @@
                         </goals>
 
                         <configuration>
-                            <imageName>petportal/petclinic-backend</imageName>
+                            <imageName>bmoussaud/petclinic-backend</imageName>
                             <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
                             <resources>
                                 <resource>
@@ -61,11 +61,26 @@
                         </goals>
 
                         <configuration>
-                            <image>petportal/petclinic-backend</image>
-                            <newName>localhost:5000/petportal/petclinic-backend:${petclinic-backend.image.version}</newName>
+                            <image>bmoussaud/petclinic-backend</image>
+                            <newName>localhost:5000/bmoussaud/petclinic-backend:${petclinic-backend.image.version}</newName>
                             <pushImage>true</pushImage>
                             <!-- We are also pushing this time -->
                             <tagInfoFile>${project.build.directory}/docker_image_info.json</tagInfoFile>
+                        </configuration>
+                    </execution>
+
+
+                    <execution>
+                        <id>push-image-to-docker-hub</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>tag</goal>
+                        </goals>
+                        <configuration>
+                            <image>bmoussaud/petclinic-backend</image>
+                            <newName>docker.io/bmoussaud/petclinic-backend:${petclinic-backend.image.version}</newName>
+                            <serverId>docker-hub</serverId>
+                            <pushImage>true</pushImage>
                         </configuration>
                     </execution>
 
@@ -84,4 +99,11 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>dummy-ftp</id>
+            <url>file:/tmp</url>
+        </repository>
+    </distributionManagement>
 </project>

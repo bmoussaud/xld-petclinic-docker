@@ -22,14 +22,14 @@
                 <!-- http://filippodeluca.com/programming/2015/02/17/docker-maven-plugin -->
                 <executions>
                     <execution>
-                        <id>build-docker-image</id>
+                        <id>build-image</id>
                         <phase>package</phase>
                         <goals>
                             <goal>build</goal>
                         </goals>
 
                         <configuration>
-                            <imageName>petportal/petclinic</imageName>
+                            <imageName>bmoussaud/petclinic</imageName>
                             <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
                             <resources>
                                 <resource>
@@ -42,18 +42,30 @@
                     </execution>
 
                     <execution>
-                        <id>push-docker-image</id>
+                        <id>tag-image</id>
                         <phase>install</phase>
                         <goals>
                             <goal>tag</goal>
                         </goals>
-
                         <configuration>
-                            <image>petportal/petclinic</image>
-                            <newName>localhost:5000/petportal/petclinic:${petclinic.image.version}</newName>
+                            <image>bmoussaud/petclinic</image>
+                            <newName>localhost:5000/bmoussaud/petclinic:${petclinic.image.version}</newName>
                             <pushImage>true</pushImage>
-                            <!-- We are also pushing this time -->
                             <tagInfoFile>${project.build.directory}/docker_image_info.json</tagInfoFile>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>push-image-to-docker-hub</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>tag</goal>
+                        </goals>
+                        <configuration>
+                            <image>bmoussaud/petclinic</image>
+                            <newName>docker.io/bmoussaud/petclinic:${petclinic.image.version}</newName>
+                            <serverId>docker-hub</serverId>
+                            <pushImage>true</pushImage>
                         </configuration>
                     </execution>
 
@@ -71,4 +83,12 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>dummy-ftp</id>
+            <url>file:/tmp</url>
+        </repository>
+    </distributionManagement>
+
 </project>

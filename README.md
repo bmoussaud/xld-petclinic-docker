@@ -149,3 +149,19 @@ The XL Deploy manifest file for the application:
 
 Use the following dictionary to configure your deployed application (fake values!)
 ![configure petdocker](petdocker_dictionary.png)
+
+
+TODO
+* Add you docker-hub entry in your maven setting.xml file.
+```
+
+    <server>
+      <id>docker-hub</id>
+      <username>bmoussaud</username>
+      <password>#########</password>
+      <configuration>
+        <email>bmoussaud@XXXXXXX</email>
+      </configuration>
+    </server>
+
+```

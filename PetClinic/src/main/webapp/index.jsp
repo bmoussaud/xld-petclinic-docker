@@ -42,7 +42,7 @@
 
     <table class="footer">
         <tr>
-            <td><a href="/petclinic/index.html">Home</a></td>
+            <td><a href="http://www.docker.com">Home</a></td>
             <td>[Hostname:<%=hostname%>]</td>
         </tr>
     </table>

@@ -32,5 +32,12 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <distributionManagement>
+        <repository>
+            <id>dummy-ftp</id>
+            <url>file:/tmp</url>
+        </repository>
+    </distributionManagement>
+
 
 </project>
