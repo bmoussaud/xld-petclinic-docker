@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -12,67 +13,82 @@
     <packaging>war</packaging>
     <name>PetClinic Docker Webapp</name>
     <url>http://www.xebialabs.com</url>
+
     <build>
         <finalName>PetClinic</finalName>
         <plugins>
             <plugin>
-                <groupId>com.spotify</groupId>
+                <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>0.4.13</version>
-                <!-- http://filippodeluca.com/programming/2015/02/17/docker-maven-plugin -->
+                <version>0.20.1</version>
                 <executions>
                     <execution>
-                        <id>build-image</id>
+                        <id>build-docker-image</id>
                         <phase>package</phase>
                         <goals>
                             <goal>build</goal>
                         </goals>
-
                         <configuration>
-                            <imageName>bmoussaud/petclinic</imageName>
-                            <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
-                            <resources>
-                                <resource>
-                                    <targetPath>/</targetPath>
-                                    <directory>${project.build.directory}</directory>
-                                    <include>${project.build.finalName}.war</include>
-                                </resource>
-                            </resources>
+                            <images>
+                                <image>
+                                    <name>bmoussaud/petclinic:${petclinic.image.version}</name>
+                                    <registry>192.168.99.100:5000/bmoussaud/petclinic</registry>
+                                    <build>
+                                        <dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir>
+                                        <assembly>
+                                            <descriptorRef>rootWar</descriptorRef>
+                                        </assembly>
+                                    </build>
+                                </image>
+                            </images>
                         </configuration>
                     </execution>
 
                     <execution>
-                        <id>tag-image</id>
+                        <id>push-docker-image</id>
                         <phase>install</phase>
                         <goals>
-                            <goal>tag</goal>
+                            <goal>push</goal>
                         </goals>
                         <configuration>
-                            <image>bmoussaud/petclinic</image>
-                            <newName>localhost:5000/bmoussaud/petclinic:${petclinic.image.version}</newName>
-                            <pushImage>true</pushImage>
-                            <tagInfoFile>${project.build.directory}/docker_image_info.json</tagInfoFile>
+                            <images>
+                                <image>
+                                    <name>bmoussaud/petclinic:${petclinic.image.version}</name>
+                                    <registry>192.168.99.100:5000</registry>
+                                    <build>
+                                        <dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir>
+                                        <assembly>
+                                            <descriptorRef>rootWar</descriptorRef>
+                                        </assembly>
+                                    </build>
+                                </image>
+                            </images>
                         </configuration>
                     </execution>
 
                     <execution>
-                        <id>push-image-to-docker-hub</id>
-                        <phase>deploy</phase>
+                        <id>push-docker-hub</id>
+                        <phase>install</phase>
                         <goals>
-                            <goal>tag</goal>
+                            <goal>push</goal>
                         </goals>
+
                         <configuration>
-                            <image>bmoussaud/petclinic</image>
-                            <newName>docker.io/bmoussaud/petclinic:${petclinic.image.version}</newName>
-                            <serverId>docker-hub</serverId>
-                            <pushImage>true</pushImage>
+                            <images>
+                                <image>
+                                    <name>bmoussaud/petclinic:${petclinic.image.version}</name>
+                                    <build>
+                                        <dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir>
+                                        <assembly>
+                                            <descriptorRef>rootWar</descriptorRef>
+                                        </assembly>
+                                    </build>
+                                </image>
+                            </images>
                         </configuration>
                     </execution>
-
                 </executions>
-
             </plugin>
-
         </plugins>
     </build>
     <dependencies>

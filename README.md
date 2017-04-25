@@ -13,10 +13,23 @@ export DOCKER_MACHINE_NAME="docker-machine-virtualbox-1"
 # eval "$(docker-machine env docker-machine-virtualbox-1)"
 ```
 
-* run `mvn clean package`
+* run `mvn clean package` to build the applications and the associated images
+
+To push the images to Docker registries
+
+* local trusted registry (default url is 192.168.99.100:5000)
+* docker.hub (edit the ~/.m2/settings.xml)
+```
+  <server>
+     <id>docker.io</id>
+     <username>xldeploy</username>
+    <password>s!cr!t</password>
+  </server>
+```
+
 
 To integrate with *XL Deploy*,
-* start XL Deploy version 5.0 with the xld-docker-plugin defined here: https://github.com/bmoussaud/xld-docker-plugin
+* start XL Deploy version with the default bundled xld-docker-plugin
 * run `mvn clean install`. This command `push`the images in the registry
   using a timestamp for version and `import` the XL Deploy DAR file in XL Deploy
 

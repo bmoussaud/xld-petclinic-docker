@@ -32,7 +32,7 @@
 
                 <configuration>
                     <serverAddress>localhost</serverAddress>
-                    <applicationName>Docker/PetDocker</applicationName>
+                    <applicationName>PetDocker</applicationName>
                     <deploymentPackageProperties>
                         <orchestrator>
                             <value>parallel-by-deployment-group</value>
@@ -46,58 +46,50 @@
                             <expectedResponseText>{{title}}</expectedResponseText>
                         </smoketest.HttpRequestTest>
 
+                        <!--
                         <smoketest.HttpRequestTest name="smoke test - ha">
                             <url>http://{{FRONT_HOST_ADDRESS}}/petclinic/</url>
                             <expectedResponseText>{{title}}</expectedResponseText>
                         </smoketest.HttpRequestTest>
+                        -->
 
-                        <docker.Image name="petclinic">
-                            <image>bmoussaud/petclinic:${petclinic.image.version}</image>
-                            <registryHost>{{PROJECT_REGISTRY_HOST}}</registryHost>
-                            <network>petnetwork</network>
-                            <labels>
-                                <value>zone=back</value>
-                            </labels>
-                            <dependencies>
-                                <value>petclinic-backend</value>
-                            </dependencies>
-                            <ports>
-                                <docker.PortSpec name="petclinic/exposed-port">
+
+                        <docker.ContainerSpec name="/petclinic">
+
+                            <image>{{REGISTRY_HOST}}/bmoussaud/petclinic:${petclinic.image.version}</image>
+                            <showLogsAfter>10</showLogsAfter>
+                            <networks>
+                                <value>petnetwork</value>
+                            </networks>
+                            <links>
+                                <entry key="petclinic-backend">X</entry>
+                            </links>
+                            <portBindings>
+                                <docker.PortSpec name="/petclinic/exposed-port">
                                     <hostPort>{{HOST_PORT}}</hostPort>
                                     <containerPort>8080</containerPort>
                                 </docker.PortSpec>
-                            </ports>
-                            <volumes>
-                                <docker.VolumeSpec name="petclinic/petclinic-config">
-                                    <source>petclinic-config</source>
-                                    <destination>/application/properties</destination>
-                                </docker.VolumeSpec>
-                            </volumes>
-                            <variables>
-                                <docker.EnvironmentVariableSpec name="petclinic/loglevel">
-                                    <value>{{LOGLEVEL}}</value>
-                                </docker.EnvironmentVariableSpec>
-                                <docker.EnvironmentVariableSpec name="petclinic/constraint">
-                                    <value>zone==back</value>
-                                    <separator>:</separator>
-                                </docker.EnvironmentVariableSpec>
-                            </variables>
-                        </docker.Image>
+                            </portBindings>
+                            <volumeBindings>
+                                <docker.MountedVolumeSpec name="/petclinic/petclinic-config">
+                                    <volumeName>petclinic-config</volumeName>
+                                    <mountpoint>/application/properties</mountpoint>
+                                </docker.MountedVolumeSpec>
+                            </volumeBindings>
+                        </docker.ContainerSpec>
+                        <docker.NetworkSpec name="/petnetwork">
+                            <driver>bridge</driver>
+                        </docker.NetworkSpec>
+                        <docker.Folder name="/petclinic.config" location="config/">
+                            <targetContainer>petclinic</targetContainer>
+                            <targetPath>/application/properties</targetPath>
+                        </docker.Folder>
+                        <docker.ContainerSpec name="/petclinic-backend">
+                            <image>{{REGISTRY_HOST}}/bmoussaud/petclinic-backend:${petclinic-backend.image.version}</image>
+                            <showLogsAfter>10</showLogsAfter>
+                        </docker.ContainerSpec>
 
-                        <docker.Image name="petclinic-backend">
-                            <image>bmoussaud/petclinic-backend:${petclinic-backend.image.version}</image>
-                            <registryHost>{{PROJECT_REGISTRY_HOST}}</registryHost>
-                            <network>petnetwork</network>
-                            <labels>
-                                <value>zone=back</value>
-                            </labels>
-                            <variables>
-                                <docker.EnvironmentVariableSpec name="petclinic-backend/constraint">
-                                    <value>zone==back</value>
-                                    <separator>:</separator>
-                                </docker.EnvironmentVariableSpec>
-                            </variables>
-                        </docker.Image>
+                        <!--
 
                         <docker.Image name="ha-proxy">
                             <image>eeacms/haproxy:1.6</image>
@@ -131,17 +123,10 @@
 
                         </docker.Image>
 
+                        -->
+
                         <sql.SqlScripts name="sql" location="sql"/>
 
-                        <docker.Folder name="petclinic.config" location="config/">
-                            <volumeName>petclinic-config</volumeName>
-                            <containerName>petclinic</containerName>
-                            <containerPath>/application/properties</containerPath>
-                        </docker.Folder>
-
-                        <docker.NetworkSpec name="petnetwork">
-                            <driver>{{petnetwork}}</driver>
-                        </docker.NetworkSpec>
 
                     </deployables>
 
