@@ -66,6 +66,8 @@
                                     <mountpoint>/application/properties</mountpoint>
                                 </docker.MountedVolumeSpec>
                             </volumeBindings>
+                            <RestartPolicyName>on-failure</RestartPolicyName>
+                            <RestartPolicyMaximumRetryCount>2</RestartPolicyMaximumRetryCount>
                         </docker.ContainerSpec>
 
                         <docker.NetworkSpec name="/petnetwork">
@@ -82,6 +84,8 @@
                             <image>{{REGISTRY_HOST}}/bmoussaud/petclinic-backend:${petclinic-backend.image.version}
                             </image>
                             <showLogsAfter>10</showLogsAfter>
+                            <RestartPolicyName>on-failure</RestartPolicyName>
+                            <RestartPolicyMaximumRetryCount>2</RestartPolicyMaximumRetryCount>
                         </docker.ContainerSpec>
 
 
@@ -114,6 +118,9 @@
                                 <entry key="BACKENDS">petclinic:8080</entry>
                                 <entry key="constraint">zone==front</entry>
                             </environment>
+
+                            <RestartPolicyName>on-failure</RestartPolicyName>
+                            <RestartPolicyMaximumRetryCount>2</RestartPolicyMaximumRetryCount>
 
                         </docker.ContainerSpec>
 
