@@ -4,7 +4,7 @@
 
     <parent>
         <groupId>com.xebialabs.xldeploy.demos</groupId>
-        <artifactId>xldeploy-petclinic-parent</artifactId>
+        <artifactId>xldeploy-petdocker-parent</artifactId>
         <version>1.0</version>
     </parent>
     <artifactId>PetPortal</artifactId>
@@ -17,8 +17,7 @@
             <plugin>
                 <groupId>com.xebialabs.xldeploy</groupId>
                 <artifactId>xldeploy-maven-plugin</artifactId>
-                <version>5.0.1</version>
-
+                <version>5.1.0</version>
                 <extensions>true</extensions>
                 <executions>
                     <execution>
@@ -46,16 +45,7 @@
                             <expectedResponseText>{{title}}</expectedResponseText>
                         </smoketest.HttpRequestTest>
 
-                        <!--
-                        <smoketest.HttpRequestTest name="smoke test - ha">
-                            <url>http://{{FRONT_HOST_ADDRESS}}/petclinic/</url>
-                            <expectedResponseText>{{title}}</expectedResponseText>
-                        </smoketest.HttpRequestTest>
-                        -->
-
-
                         <docker.ContainerSpec name="/petclinic">
-
                             <image>{{REGISTRY_HOST}}/bmoussaud/petclinic:${petclinic.image.version}</image>
                             <showLogsAfter>10</showLogsAfter>
                             <networks>
@@ -77,31 +67,39 @@
                                 </docker.MountedVolumeSpec>
                             </volumeBindings>
                         </docker.ContainerSpec>
+
                         <docker.NetworkSpec name="/petnetwork">
                             <driver>bridge</driver>
                         </docker.NetworkSpec>
+
+
                         <docker.Folder name="/petclinic.config" location="config/">
                             <targetContainer>petclinic</targetContainer>
                             <targetPath>/application/properties</targetPath>
                         </docker.Folder>
+
                         <docker.ContainerSpec name="/petclinic-backend">
-                            <image>{{REGISTRY_HOST}}/bmoussaud/petclinic-backend:${petclinic-backend.image.version}</image>
+                            <image>{{REGISTRY_HOST}}/bmoussaud/petclinic-backend:${petclinic-backend.image.version}
+                            </image>
                             <showLogsAfter>10</showLogsAfter>
                         </docker.ContainerSpec>
 
-                        <!--
 
-                        <docker.Image name="ha-proxy">
-                            <image>eeacms/haproxy:1.6</image>
-                            <registryHost>{{PROJECT_REGISTRY_HOST}}</registryHost>
-                            <network>petnetwork</network>
-                            <labels>
-                                <value>zone=front</value>
-                            </labels>
-                            <dependencies>
-                                <value>petclinic</value>
-                            </dependencies>
-                            <ports>
+                        <smoketest.HttpRequestTest name="smoke test - ha">
+                            <url>http://{{FRONT_HOST_ADDRESS}}/petclinic/</url>
+                            <expectedResponseText>{{title}}</expectedResponseText>
+                        </smoketest.HttpRequestTest>
+
+                        <docker.ContainerSpec name="ha-proxy">
+                            <image>{{REGISTRY_HOST}}/eeacms/haproxy:1.6</image>
+                            <showLogsAfter>10</showLogsAfter>
+                            <networks>
+                                <value>petnetwork</value>
+                            </networks>
+                            <links>
+                                <entry key="petclinic">petclinic</entry>
+                            </links>
+                            <portBindings>
                                 <docker.PortSpec name="ha-proxy/web">
                                     <hostPort>80</hostPort>
                                     <containerPort>5000</containerPort>
@@ -110,27 +108,16 @@
                                     <hostPort>1936</hostPort>
                                     <containerPort>1936</containerPort>
                                 </docker.PortSpec>
-                            </ports>
-                            <variables>
-                                <docker.EnvironmentVariableSpec name="ha-proxy/BACKENDS">
-                                    <value>petclinic:8080</value>
-                                </docker.EnvironmentVariableSpec>
-                                <docker.EnvironmentVariableSpec name="ha-proxy/constraint">
-                                    <value>zone==front</value>
-                                    <separator>:</separator>
-                                </docker.EnvironmentVariableSpec>
-                            </variables>
+                            </portBindings>
 
-                        </docker.Image>
+                            <environment>
+                                <entry key="BACKENDS">petclinic:8080</entry>
+                                <entry key="constraint">zone==front</entry>
+                            </environment>
 
-                        -->
-
-                        <sql.SqlScripts name="sql" location="sql"/>
-
+                        </docker.ContainerSpec>
 
                     </deployables>
-
-
                 </configuration>
             </plugin>
         </plugins>
