@@ -19,6 +19,7 @@
         <module>PetClinic</module>
         <module>PetClinic-Backend</module>
         <module>dar</module>
+        <module>dar-k8s</module>
     </modules>
 
     <pluginRepositories>

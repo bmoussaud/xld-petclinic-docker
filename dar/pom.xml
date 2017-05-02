@@ -75,7 +75,7 @@
                         </docker.NetworkSpec>
 
 
-                        <docker.Folder name="/petclinic.config" location="config/">
+                            <docker.Folder name="/petclinic.config" location="config/">
                             <targetContainer>petclinic</targetContainer>
                             <targetPath>/application/properties</targetPath>
                         </docker.Folder>

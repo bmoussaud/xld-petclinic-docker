@@ -1,0 +1,171 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.xebialabs.xldeploy.demos</groupId>
+        <artifactId>xldeploy-petdocker-parent</artifactId>
+        <version>1.0</version>
+    </parent>
+    <artifactId>dar-k8s</artifactId>
+    <packaging>dar</packaging>
+    <version>3.1-SNAPSHOT</version>
+    <name>PetClinic Kubernetes XL Deploy DAR</name>
+    <url>http://www.xebialabs.com</url>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.xebialabs.xldeploy</groupId>
+                <artifactId>xldeploy-maven-plugin</artifactId>
+                <version>5.1.0</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>deploy-id</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>import</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <serverAddress>localhost</serverAddress>
+                    <applicationName>Petk8s</applicationName>
+                    <deploymentPackageProperties>
+                        <orchestrator>
+                            <value>parallel-by-deployment-group</value>
+                        </orchestrator>
+                    </deploymentPackageProperties>
+
+                    <orchestrator>parallel-by-deployment-group</orchestrator>
+                    <deployables>
+                        <smoketest.HttpRequestTest name="smoke test">
+                            <url>http://{{BACK_HOST_ADDRESS}}:32129/petclinic/</url>
+                            <expectedResponseText>{{title}}</expectedResponseText>
+                        </smoketest.HttpRequestTest>
+
+                        <smoketest.HttpRequestTest name="smoke test - ha">
+                            <url>http://{{FRONT_HOST_ADDRESS}}:30080/petclinic/</url>
+                            <expectedResponseText>{{title}}</expectedResponseText>
+                        </smoketest.HttpRequestTest>
+
+                        <kubernetes.PodSpec name="/petclinic-pod">
+                            <labels>
+                                <entry key="app">petk8s</entry>
+                            </labels>
+                            <namespace>petk8s</namespace>
+                            <containers>
+                                <kubernetes.ContainerSpec name="/petclinic-pod/petclinic">
+                                    <image>{{REGISTRY_HOST}}/bmoussaud/petclinic:${petclinic.image.version}</image>
+                                    <ports>
+                                        <kubernetes.ContainerPortSpec name="/petclinic-pod/petclinic/web">
+                                            <containerPort>8080</containerPort>
+                                        </kubernetes.ContainerPortSpec>
+                                    </ports>
+                                    <volumeMounts>
+                                        <kubernetes.ContainerVolumeSpec name="/petclinic-pod/petclinic/config-volume">
+                                            <readOnly>false</readOnly>
+                                            <mountPath>/application/properties</mountPath>
+                                        </kubernetes.ContainerVolumeSpec>
+                                    </volumeMounts>
+                                </kubernetes.ContainerSpec>
+                            </containers>
+                            <volumes>
+                                <kubernetes.VolumeSpec name="/petclinic-pod/config-volume">
+                                    <configMapName>petclinic.config</configMapName>
+                                </kubernetes.VolumeSpec>
+                            </volumes>
+                        </kubernetes.PodSpec>
+                        <kubernetes.PodSpec name="/petclinic-backend-pod">
+                            <labels>
+                                <entry key="app">petk8s-back</entry>
+                            </labels>
+                            <namespace>petk8s</namespace>
+                            <containers>
+                                <kubernetes.ContainerSpec name="/petclinic-backend-pod/petclinic-backend">
+                                    <image>{{REGISTRY_HOST}}/bmoussaud/petclinic-backend:${petclinic-backend.image.version}</image>
+                                    <ports>
+                                        <kubernetes.ContainerPortSpec
+                                                name="/petclinic-backend-pod/petclinic-backend/web">
+                                            <containerPort>8081</containerPort>
+                                        </kubernetes.ContainerPortSpec>
+                                    </ports>
+                                </kubernetes.ContainerSpec>
+                            </containers>
+
+                        </kubernetes.PodSpec>
+                        <kubernetes.ConfigMapSpecFolder name="/petclinic.config" location="config/">
+                            <namespace>petk8s</namespace>
+                        </kubernetes.ConfigMapSpecFolder>
+
+                        <kubernetes.ServiceSpec name="/ha-proxy">
+                            <selector>
+                                <entry key="app">petk8s</entry>
+                            </selector>
+                            <serviceType>NodePort</serviceType>
+                            <namespace>petk8s</namespace>
+                            <labels>
+                                <entry key="app">petk8s</entry>
+                            </labels>
+                            <ports>
+                                <kubernetes.ServicePortSpec name="/ha-proxy/admin">
+                                    <port>1936</port>
+                                    <nodePort>31936</nodePort>
+                                </kubernetes.ServicePortSpec>
+                                <kubernetes.ServicePortSpec name="/ha-proxy/traffic">
+                                    <port>5000</port>
+                                    <nodePort>30080</nodePort>
+                                </kubernetes.ServicePortSpec>
+                            </ports>
+                        </kubernetes.ServiceSpec>
+                        <kubernetes.NamespaceSpec name="/petk8s-ns">
+                            <namespaceName>petk8s</namespaceName>
+                        </kubernetes.NamespaceSpec>
+                        <kubernetes.PodSpec name="/ha-proxy-pod">
+                            <labels>
+                                <entry key="app">petk8s</entry>
+                            </labels>
+                            <namespace>petk8s</namespace>
+                            <containers>
+                                <kubernetes.ContainerSpec name="/ha-proxy-pod/proxy">
+                                    <image>{{REGISTRY_HOST}}/eeacms/haproxy:1.6</image>
+                                    <env>
+                                        <entry key="BACKENDS">petclinic:8080</entry>
+                                        <entry key="constraint">zone==front</entry>
+                                    </env>
+                                    <ports>
+                                        <kubernetes.ContainerPortSpec name="/ha-proxy-pod/proxy/admin">
+                                            <containerPort>1936</containerPort>
+                                        </kubernetes.ContainerPortSpec>
+                                        <kubernetes.ContainerPortSpec name="/ha-proxy-pod/proxy/trafic">
+                                            <containerPort>5000</containerPort>
+                                        </kubernetes.ContainerPortSpec>
+                                    </ports>
+                                </kubernetes.ContainerSpec>
+                            </containers>
+                        </kubernetes.PodSpec>
+                        <kubernetes.ServiceSpec name="/petclinic">
+                            <selector>
+                                <entry key="app">petk8s</entry>
+                            </selector>
+                            <serviceType>NodePort</serviceType>
+                            <namespace>petk8s</namespace>
+                            <labels>
+                                <entry key="app">petk8s</entry>
+                            </labels>
+                            <ports>
+                                <kubernetes.ServicePortSpec name="/petclinic/web">
+                                    <port>8080</port>
+                                    <nodePort>32129</nodePort>
+                                </kubernetes.ServicePortSpec>
+                            </ports>
+                        </kubernetes.ServiceSpec>
+
+                    </deployables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
