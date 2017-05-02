@@ -1,5 +1,5 @@
 # xld-petclinic-docker
-A sample application that shows how to package docker images and deploy them to Docker using XLDeploy.
+A sample application that shows how to package docker images and deploy them to a Docker Engine and a Kubenetes Cluster using XLDeploy.
 
 ## Usage
 * set the `docker` environment
@@ -36,7 +36,7 @@ To integrate with *XL Deploy*,
 ![deployment with xld-docker-plugin](docker_deployment.png)
 
 
-The XL Deploy manifest file for the application:
+The XL Deploy manifest file for the application (Docker):
 
 ```
 <?xml version="1.0" encoding="UTF-8"?>
