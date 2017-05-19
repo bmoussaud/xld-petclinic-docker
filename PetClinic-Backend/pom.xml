@@ -81,7 +81,7 @@
               </images>
             </configuration>
           </execution>
-
+          <!--
           <execution>
             <id>push-docker-hub</id>
             <phase>install</phase>
@@ -103,6 +103,7 @@
               </images>
             </configuration>
           </execution>
+-->
         </executions>
       </plugin>
 
