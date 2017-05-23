@@ -24,7 +24,7 @@
                         <id>deploy-id</id>
                         <phase>install</phase>
                         <goals>
-                            <goal>deploy</goal>
+                            <goal>import</goal>
                         </goals>
                     </execution>
                 </executions>
