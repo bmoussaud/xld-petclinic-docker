@@ -24,7 +24,7 @@
                         <id>deploy-id</id>
                         <phase>install</phase>
                         <goals>
-                            <goal>import</goal>
+                            <goal>deploy</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -32,6 +32,7 @@
                 <configuration>
                     <serverAddress>localhost</serverAddress>
                     <applicationName>Petk8s</applicationName>
+                    <environmentId>Environments/Containers/K8S</environmentId>
                     <deploymentPackageProperties>
                         <orchestrator>
                             <value>parallel-by-deployment-group</value>

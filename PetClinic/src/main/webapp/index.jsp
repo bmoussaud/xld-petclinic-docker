@@ -15,6 +15,14 @@
         hostname = "docker_host_not_found";
     }
 
+    String provider;
+    try {
+        ResourceBundle resource = ResourceBundle.getBundle("petclinic");
+        provider = "/petclinic/images/"+resource.getString("provider");
+    } catch (Exception e) {
+        provider = "/petclinic/images/dummy.png";
+    }
+
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -27,7 +35,7 @@
 <body>
 
 <div id="main">
-    <img src="/petclinic/images/docker.jpg" align="right" style="position:relative;right:30px;">
+    <img src="<%=provider%>" align="right" style="position:relative;right:30px;">
 
     <p>&nbsp;</p>
 
