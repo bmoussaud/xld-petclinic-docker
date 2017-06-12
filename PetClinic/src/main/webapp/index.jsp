@@ -29,7 +29,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="styles/petclinic.css" type="text/css"/>
-    <title>PetDocker</title>
+    <title>PetPortal with Containers</title>
 </head>
 
 <body>
