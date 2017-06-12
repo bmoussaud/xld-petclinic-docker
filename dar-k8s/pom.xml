@@ -58,7 +58,7 @@
                             <namespace>petk8s</namespace>
                             <containers>
                                 <kubernetes.ContainerSpec name="/petclinic-pod/petclinic">
-                                    <image>{{REGISTRY_HOST}}/bmoussaud/petclinic:${petclinic.image.version}</image>
+                                    <image>{{REGISTRY_HOST}}bmoussaud/petclinic:${petclinic.image.version}</image>
                                     <ports>
                                         <kubernetes.ContainerPortSpec name="/petclinic-pod/petclinic/web">
                                             <containerPort>8080</containerPort>
@@ -85,7 +85,7 @@
                             <namespace>petk8s</namespace>
                             <containers>
                                 <kubernetes.ContainerSpec name="/petclinic-backend-pod/petclinic-backend">
-                                    <image>{{REGISTRY_HOST}}/bmoussaud/petclinic-backend:${petclinic-backend.image.version}</image>
+                                    <image>{{REGISTRY_HOST}}bmoussaud/petclinic-backend:${petclinic-backend.image.version}</image>
                                     <ports>
                                         <kubernetes.ContainerPortSpec
                                                 name="/petclinic-backend-pod/petclinic-backend/web">
@@ -104,7 +104,8 @@
                             <selector>
                                 <entry key="app">petk8s</entry>
                             </selector>
-                            <serviceType>NodePort</serviceType>
+                            <serviceType>{{haproxy.service.type}}</serviceType>
+
                             <namespace>petk8s</namespace>
                             <labels>
                                 <entry key="app">petk8s</entry>
@@ -130,7 +131,7 @@
                             <namespace>petk8s</namespace>
                             <containers>
                                 <kubernetes.ContainerSpec name="/ha-proxy-pod/proxy">
-                                    <image>{{REGISTRY_HOST}}/eeacms/haproxy:1.6</image>
+                                    <image>{{REGISTRY_HOST}}eeacms/haproxy:1.6</image>
                                     <env>
                                         <entry key="BACKENDS">petclinic:8080</entry>
                                         <entry key="constraint">zone==front</entry>
@@ -150,7 +151,7 @@
                             <selector>
                                 <entry key="app">petk8s</entry>
                             </selector>
-                            <serviceType>NodePort</serviceType>
+                            <serviceType>{{petclinic.service.type}}</serviceType>
                             <namespace>petk8s</namespace>
                             <labels>
                                 <entry key="app">petk8s</entry>
