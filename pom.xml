@@ -20,6 +20,7 @@
         <module>PetClinic-Backend</module>
         <module>dar</module>
         <module>dar-k8s</module>
+        <module>dar-openshift</module>
     </modules>
 
     <pluginRepositories>
