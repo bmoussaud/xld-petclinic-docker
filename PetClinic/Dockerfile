@@ -1,9 +1,11 @@
-FROM tomcat:8.0.37-jre8-alpine
-RUN addgroup xebialabs && adduser -HD petclinic && adduser petclinic xebialabs
-RUN chown -R petclinic:xebialabs /usr/local/tomcat
-USER petclinic
+FROM tomcat:8.0.46-jre8
+RUN groupadd -g 999 -r xl && useradd -u 999 --no-log-init -r -g xl xl
+RUN chown -R xl:xl /usr/local/tomcat
+RUN chmod -R 777 /usr/local/tomcat
+USER 999
+
 ENV JAVA_OPTS -Xmx512m -Djava.security.egd=file:/dev/./urandom
-RUN  mkdir -p /usr/local/tomcat/conf/Catalina/localhost
+RUN mkdir -p /usr/local/tomcat/conf/Catalina/localhost
 
 COPY src/main/docker/petclinic.xml  /usr/local/tomcat/conf/Catalina/localhost/petclinic.xml
 COPY src/main/docker/catalina.properties /usr/local/tomcat/conf/catalina.properties
