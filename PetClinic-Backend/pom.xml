@@ -28,84 +28,26 @@
             </plugin>
 
             <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.20.1</version>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.3.5</version>
                 <executions>
                     <execution>
                         <id>build-docker-image</id>
                         <phase>package</phase>
                         <goals>
                             <goal>build</goal>
-                        </goals>
-                        <configuration>
-                            <machine>
-                                <name>registry-virtualbox-1</name>
-                            </machine>
-                            <images>
-                                <image>
-                                    <name>bmoussaud/petclinic-backend:${petclinic-backend.image.version}</name>
-                                    <registry>192.168.99.100:5000/bmoussaud/petclinic-backend</registry>
-                                    <build>
-                                        <dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir>
-                                        <assembly>
-                                            <descriptorRef>rootWar</descriptorRef>
-                                        </assembly>
-                                    </build>
-                                </image>
-                            </images>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>push-docker-image</id>
-                        <phase>install</phase>
-                        <goals>
+                            <goal>tag</goal>
                             <goal>push</goal>
                         </goals>
                         <configuration>
-                            <machine>
-                                <name>registry-virtualbox-1</name>
-                            </machine>
-                            <images>
-                                <image>
-                                    <name>bmoussaud/petclinic-backend:${petclinic-backend.image.version}</name>
-                                    <registry>192.168.99.100:5000</registry>
-                                    <build>
-                                        <dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir>
-                                        <assembly>
-                                            <descriptorRef>rootWar</descriptorRef>
-                                        </assembly>
-                                    </build>
-                                </image>
-                            </images>
+                            <repository>bmoussaud/petclinic-backend</repository>
+                            <tag>${petclinic-backend.image.version}</tag>
                         </configuration>
                     </execution>
-
-                    <execution>
-                        <id>push-docker-hub</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>push</goal>
-                        </goals>
-
-                        <configuration>
-                            <images>
-                                <image>
-                                    <name>bmoussaud/petclinic-backend:${petclinic-backend.image.version}</name>
-                                    <build>
-                                        <dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir>
-                                        <assembly>
-                                            <descriptorRef>rootWar</descriptorRef>
-                                        </assembly>
-                                    </build>
-                                </image>
-                            </images>
-                        </configuration>
-                    </execution>
-    
                 </executions>
             </plugin>
+
 
         </plugins>
     </build>
@@ -118,10 +60,4 @@
         </dependency>
     </dependencies>
 
-    <distributionManagement>
-        <repository>
-            <id>dummy-ftp</id>
-            <url>file:/tmp</url>
-        </repository>
-    </distributionManagement>
 </project>

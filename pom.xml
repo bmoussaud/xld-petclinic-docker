@@ -11,8 +11,8 @@
     <properties>
         <maven.build.timestamp.format>yyyyddMMHHmmss</maven.build.timestamp.format>
         <petclinic.build.date>${maven.build.timestamp}</petclinic.build.date>
-        <petclinic.image.version>3.1-${petclinic.build.date}</petclinic.image.version>
-        <petclinic-backend.image.version>1.1-${petclinic.build.date}</petclinic-backend.image.version>
+        <petclinic.image.version>4.1-${petclinic.build.date}</petclinic.image.version>
+        <petclinic-backend.image.version>2.1-${petclinic.build.date}</petclinic-backend.image.version>
     </properties>
 
     <modules>
