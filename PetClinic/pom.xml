@@ -9,7 +9,7 @@
         <version>1.0</version>
     </parent>
     <artifactId>PetClinic</artifactId>
-    <version>4.1-SNAPSHOT</version>
+    <version>4.2-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>PetClinic Docker Webapp</name>
     <url>http://www.xebialabs.com</url>
@@ -33,6 +33,9 @@
                         <configuration>
                             <repository>bmoussaud/petclinic</repository>
                             <tag>${petclinic.image.version}</tag>
+                            <buildArgs>
+                                <PET_VERSION>${petclinic.image.version}</PET_VERSION>
+                            </buildArgs>
                         </configuration>
                     </execution>
                 </executions>
@@ -47,5 +50,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
 </project>

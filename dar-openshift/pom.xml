@@ -9,7 +9,7 @@
     </parent>
     <artifactId>dar-openshift</artifactId>
     <packaging>dar</packaging>
-    <version>3.1-SNAPSHOT</version>
+    <version>4.2-SNAPSHOT</version>
     <name>PetClinic Openshift Kubernetes XL Deploy DAR</name>
     <url>http://www.xebialabs.com</url>
     <build>

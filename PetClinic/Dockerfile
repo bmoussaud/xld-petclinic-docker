@@ -5,6 +5,9 @@ RUN chmod -R 777 /usr/local/tomcat
 USER 999
 
 ENV JAVA_OPTS -Xmx512m -Djava.security.egd=file:/dev/./urandom
+ARG PET_VERSION
+ENV MY_PET_VERSION ${PET_VERSION}
+
 RUN mkdir -p /usr/local/tomcat/conf/Catalina/localhost
 
 COPY src/main/docker/petclinic.xml  /usr/local/tomcat/conf/Catalina/localhost/petclinic.xml

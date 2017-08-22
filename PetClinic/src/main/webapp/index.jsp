@@ -15,6 +15,13 @@
         hostname = "docker_host_not_found";
     }
 
+    String petVersion;
+    try {
+        petVersion = System.getenv("MY_PET_VERSION");
+    } catch (Exception e) {
+        petVersion = "X.Y.Z";
+    }
+
     String provider;
     try {
         ResourceBundle resource = ResourceBundle.getBundle("petclinic");
@@ -52,6 +59,7 @@
         <tr>
             <td><a href="http://www.docker.com">Home</a></td>
             <td>[Hostname:<%=hostname%>]</td>
+            <td>[Version:<%=petVersion%>]</td>
         </tr>
     </table>
 
