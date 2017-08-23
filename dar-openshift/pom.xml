@@ -42,14 +42,10 @@
                     <orchestrator>parallel-by-deployment-group</orchestrator>
                     <deployables>
                         <smoketest.HttpRequestTest name="smoke test">
-                            <url>http://{{BACK_HOST_ADDRESS}}:32129/petclinic/</url>
+                            <url>https://{{exposed.service.petclinic}}/petclinic/</url>
                             <expectedResponseText>{{title}}</expectedResponseText>
                         </smoketest.HttpRequestTest>
 
-                        <smoketest.HttpRequestTest name="smoke test - ha">
-                            <url>http://{{FRONT_HOST_ADDRESS}}:30080/petclinic/</url>
-                            <expectedResponseText>{{title}}</expectedResponseText>
-                        </smoketest.HttpRequestTest>
 
                         <kubernetes.PodSpec name="/petclinic-pod">
                             <labels>
@@ -115,6 +111,12 @@
                         </kubernetes.ConfigMapSpecFolder>
 
                         <!--
+
+                          <smoketest.HttpRequestTest name="smoke test - ha">
+                            <url>http://{{FRONT_HOST_ADDRESS}}:30080/petclinic/</url>
+                            <expectedResponseText>{{title}}</expectedResponseText>
+                        </smoketest.HttpRequestTest>
+
 
                         <kubernetes.ServiceSpec name="/ha-proxy">
                             <selector>
