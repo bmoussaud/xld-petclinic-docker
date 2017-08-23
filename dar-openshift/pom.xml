@@ -70,6 +70,20 @@
                                             <mountPath>/application/properties</mountPath>
                                         </kubernetes.ContainerVolumeSpec>
                                     </volumeMounts>
+                                    <probes>
+                                        <kubernetes.ContainerProbeSpec name="/petclinic-pod/petclinic/livenessProbe">
+                                            <httpget_path>/petclinic/live.jsp</httpget_path>
+                                            <httpget_port>8080</httpget_port>
+                                            <initialDelaySeconds>5</initialDelaySeconds>
+                                            <periodSeconds>30</periodSeconds>
+                                        </kubernetes.ContainerProbeSpec>
+                                        <kubernetes.ContainerProbeSpec name="/petclinic-pod/petclinic/readinessProbe">
+                                            <httpget_path>/petclinic/ready.jsp</httpget_path>
+                                            <httpget_port>8080</httpget_port>
+                                            <initialDelaySeconds>5</initialDelaySeconds>
+                                            <periodSeconds>30</periodSeconds>
+                                        </kubernetes.ContainerProbeSpec>
+                                    </probes>
                                 </kubernetes.ContainerSpec>
                             </containers>
                             <volumes>
@@ -82,7 +96,7 @@
                             <labels>
                                 <entry key="app">petshift-back</entry>
                             </labels>
-                             
+
                             <containers>
                                 <kubernetes.ContainerSpec name="/petclinic-backend-pod/petclinic-backend">
                                     <image>{{REGISTRY_HOST}}bmoussaud/petclinic-backend:${petclinic-backend.image.version}</image>
