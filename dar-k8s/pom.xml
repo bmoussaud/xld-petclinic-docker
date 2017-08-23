@@ -9,7 +9,7 @@
     </parent>
     <artifactId>dar-k8s</artifactId>
     <packaging>dar</packaging>
-    <version>3.1-SNAPSHOT</version>
+    <version>4.2-SNAPSHOT</version>
     <name>PetClinic Kubernetes XL Deploy DAR</name>
     <url>http://www.xebialabs.com</url>
     <build>
@@ -41,15 +41,19 @@
 
                     <orchestrator>parallel-by-deployment-group</orchestrator>
                     <deployables>
-                        <smoketest.HttpRequestTest name="smoke test">
+                        <smoketest.HttpRequestTest name="smoke test petclinic service">
                             <url>http://{{BACK_HOST_ADDRESS}}:32129/petclinic/</url>
                             <expectedResponseText>{{title}}</expectedResponseText>
+                            <startDelay>20</startDelay>
+                            <maxRetries>10</maxRetries>
                         </smoketest.HttpRequestTest>
 
+                        <!--
                         <smoketest.HttpRequestTest name="smoke test - ha">
                             <url>http://{{FRONT_HOST_ADDRESS}}:30080/petclinic/</url>
                             <expectedResponseText>{{title}}</expectedResponseText>
                         </smoketest.HttpRequestTest>
+                        -->
 
                         <kubernetes.PodSpec name="/petclinic-pod">
                             <labels>
@@ -59,6 +63,7 @@
                             <containers>
                                 <kubernetes.ContainerSpec name="/petclinic-pod/petclinic">
                                     <image>{{REGISTRY_HOST}}bmoussaud/petclinic:${petclinic.image.version}</image>
+                                    <imagePullPolicy>IfNotPresent</imagePullPolicy>
                                     <ports>
                                         <kubernetes.ContainerPortSpec name="/petclinic-pod/petclinic/web">
                                             <containerPort>8080</containerPort>
@@ -70,6 +75,20 @@
                                             <mountPath>/application/properties</mountPath>
                                         </kubernetes.ContainerVolumeSpec>
                                     </volumeMounts>
+                                    <probes>
+                                        <kubernetes.ContainerProbeSpec name="/petclinic-pod/petclinic/livenessProbe">
+                                            <httpget_path>/petclinic/live.jsp</httpget_path>
+                                            <httpget_port>8080</httpget_port>
+                                            <initialDelaySeconds>5</initialDelaySeconds>
+                                            <periodSeconds>30</periodSeconds>
+                                        </kubernetes.ContainerProbeSpec>
+                                        <kubernetes.ContainerProbeSpec name="/petclinic-pod/petclinic/readinessProbe">
+                                            <httpget_path>/petclinic/ready.jsp</httpget_path>
+                                            <httpget_port>8080</httpget_port>
+                                            <initialDelaySeconds>5</initialDelaySeconds>
+                                            <periodSeconds>30</periodSeconds>
+                                        </kubernetes.ContainerProbeSpec>
+                                    </probes>
                                 </kubernetes.ContainerSpec>
                             </containers>
                             <volumes>
@@ -78,6 +97,8 @@
                                 </kubernetes.VolumeSpec>
                             </volumes>
                         </kubernetes.PodSpec>
+
+
                         <kubernetes.PodSpec name="/petclinic-backend-pod">
                             <labels>
                                 <entry key="app">petk8s-back</entry>
@@ -86,6 +107,7 @@
                             <containers>
                                 <kubernetes.ContainerSpec name="/petclinic-backend-pod/petclinic-backend">
                                     <image>{{REGISTRY_HOST}}bmoussaud/petclinic-backend:${petclinic-backend.image.version}</image>
+                                    <imagePullPolicy>IfNotPresent</imagePullPolicy>
                                     <ports>
                                         <kubernetes.ContainerPortSpec
                                                 name="/petclinic-backend-pod/petclinic-backend/web">
@@ -94,11 +116,13 @@
                                     </ports>
                                 </kubernetes.ContainerSpec>
                             </containers>
-
                         </kubernetes.PodSpec>
+
                         <kubernetes.ConfigMapSpecFolder name="/petclinic.config" location="config/">
                             <namespace>petk8s</namespace>
                         </kubernetes.ConfigMapSpecFolder>
+
+                        <!--
 
                         <kubernetes.ServiceSpec name="/ha-proxy">
                             <selector>
@@ -121,9 +145,15 @@
                                 </kubernetes.ServicePortSpec>
                             </ports>
                         </kubernetes.ServiceSpec>
+
+                        -->
+
                         <kubernetes.NamespaceSpec name="/petk8s-ns">
                             <namespaceName>petk8s</namespaceName>
                         </kubernetes.NamespaceSpec>
+
+
+                        <!--
                         <kubernetes.PodSpec name="/ha-proxy-pod">
                             <labels>
                                 <entry key="app">petk8s</entry>
@@ -147,6 +177,9 @@
                                 </kubernetes.ContainerSpec>
                             </containers>
                         </kubernetes.PodSpec>
+
+                        -->
+
                         <kubernetes.ServiceSpec name="/petclinic">
                             <selector>
                                 <entry key="app">petk8s</entry>

@@ -41,9 +41,11 @@
 
                     <orchestrator>parallel-by-deployment-group</orchestrator>
                     <deployables>
-                        <smoketest.HttpRequestTest name="smoke test">
+                        <smoketest.HttpRequestTest name="smoke test petclinic service">
                             <url>https://{{exposed.service.petclinic}}/petclinic/</url>
                             <expectedResponseText>{{title}}</expectedResponseText>
+                            <startDelay>20</startDelay>
+                            <maxRetries>10</maxRetries>
                         </smoketest.HttpRequestTest>
 
 
