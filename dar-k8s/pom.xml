@@ -79,14 +79,14 @@
                                         <kubernetes.ContainerProbeSpec name="/petclinic-pod/petclinic/livenessProbe">
                                             <httpget_path>/petclinic/live.jsp</httpget_path>
                                             <httpget_port>8080</httpget_port>
-                                            <initialDelaySeconds>65</initialDelaySeconds>
-                                            <periodSeconds>65</periodSeconds>
+                                            <initialDelaySeconds>30</initialDelaySeconds>
+                                            <periodSeconds>15</periodSeconds>
                                         </kubernetes.ContainerProbeSpec>
                                         <kubernetes.ContainerProbeSpec name="/petclinic-pod/petclinic/readinessProbe">
                                             <httpget_path>/petclinic/ready.jsp</httpget_path>
                                             <httpget_port>8080</httpget_port>
-                                            <initialDelaySeconds>65</initialDelaySeconds>
-                                            <periodSeconds>65</periodSeconds>
+                                            <initialDelaySeconds>30</initialDelaySeconds>
+                                            <periodSeconds>15</periodSeconds>
                                         </kubernetes.ContainerProbeSpec>
                                     </probes>
                                 </kubernetes.ContainerSpec>
