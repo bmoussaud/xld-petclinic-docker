@@ -13,6 +13,12 @@ export DOCKER_MACHINE_NAME="docker-machine-virtualbox-1"
 # eval "$(docker-machine env docker-machine-virtualbox-1)"
 ```
 
+or 
+
+```
+eval $(minikube docker-env)
+```
+
 * run `mvn clean package` to build the applications and the associated images
 
 To push the images to Docker registries
@@ -20,11 +26,16 @@ To push the images to Docker registries
 * local trusted registry (default url is 192.168.99.100:5000)
 * docker.hub (edit the ~/.m2/settings.xml)
 ```
-  <server>
-     <id>docker.io</id>
-     <username>xldeploy</username>
-    <password>s!cr!t</password>
-  </server>
+   <server>
+        <id>docker-hub</id>
+        <username>bmoussaud</username>
+        <password>XXXXXXXX</password>
+        <configuration>
+          <email>bmoussaud@xebialabs.com</email>
+        </configuration>
+   </server>
+  
+
 ```
 
 

@@ -43,6 +43,7 @@
                         <configuration>
                             <repository>bmoussaud/petclinic-backend</repository>
                             <tag>${petclinic-backend.image.version}</tag>
+                            <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
                         </configuration>
                     </execution>
                 </executions>
