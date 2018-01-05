@@ -108,7 +108,7 @@
                             </containers>
 
                         </kubernetes.PodSpec>
-                        <kubernetes.ConfigMapSpecFolder name="/petclinic.config" location="config/">
+                            <kubernetes.ConfigMapSpecFolder name="/petclinic.config" location="config/">
 
                         </kubernetes.ConfigMapSpecFolder>
 

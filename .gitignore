@@ -25,3 +25,4 @@ itest.properties
 !overthere-plugin/src/test/resources/itest.properties
 */target/*
 xl-deploy-5.5.1-server/
+xl-deploy-7.5.0-server/

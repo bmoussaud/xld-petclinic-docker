@@ -18,9 +18,9 @@
     <modules>
         <module>PetClinic</module>
         <module>PetClinic-Backend</module>
-        <module>dar</module>
+        <module>dar-docker</module>
         <module>dar-k8s</module>
-        <module>dar-openshift</module>
+        <module>custom-rules</module>
     </modules>
 
     <pluginRepositories>

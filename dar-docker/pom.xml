@@ -7,7 +7,7 @@
         <artifactId>xldeploy-petdocker-parent</artifactId>
         <version>1.0</version>
     </parent>
-    <artifactId>dar</artifactId>
+    <artifactId>dar-docker</artifactId>
     <packaging>dar</packaging>
     <version>3.1-SNAPSHOT</version>
     <name>PetClinic Docker XL Deploy DAR</name>
@@ -32,6 +32,7 @@
                 <configuration>
                     <serverAddress>localhost</serverAddress>
                     <applicationName>PetDocker</applicationName>
+                    <port>4530</port>
                     <deploymentPackageProperties>
                         <orchestrator>
                             <value>parallel-by-deployment-group</value>

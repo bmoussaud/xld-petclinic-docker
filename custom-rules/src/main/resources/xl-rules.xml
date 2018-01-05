@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!--
+    Note: If you modify this file and automatic reloading is disabled in `planner.conf`, you must restart the XL Deploy server.
+-->
+<rules xmlns="http://www.xebialabs.com/xl-deploy/xl-rules">
+    <rule name="kubernetes.stop.start.pods.on.modified.config.map" scope="plan">
+      <planning-script-path>myxld/kubernetes/config_map/planningScript/start_stop_deployment_on_modified_config_map.py</planning-script-path>
+    </rule>
+</rules>
