@@ -32,7 +32,7 @@
                 <configuration>
                     <serverAddress>localhost</serverAddress>
                     <port>4516</port>
-                    <applicationName>PetK8s</applicationName>
+                    <applicationName>Petk8s</applicationName>
                     <environmentId>Environments/Openshift</environmentId>
                     <deploymentPackageProperties>
                         <orchestrator>
