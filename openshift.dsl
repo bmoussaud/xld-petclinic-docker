@@ -35,6 +35,7 @@ xld {
       'title': 'RIRIRO',
       'timeout': '1000',
       'logLevel': 'DEBUG'
+      'petclinic.service.port':'31291'
     ])
   }
 }

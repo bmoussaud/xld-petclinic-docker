@@ -56,7 +56,7 @@
                             </selectors>
                             <ports>
                                 <k8s.ServicePortSpec name="/petclinic.service/web">
-                                    <nodePort>31289</nodePort>
+                                    <nodePort>{{petclinic.service.port}}</nodePort>
                                     <port>8080</port>
                                 </k8s.ServicePortSpec>
                             </ports>
