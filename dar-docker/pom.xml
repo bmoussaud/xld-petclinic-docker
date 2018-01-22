@@ -32,7 +32,7 @@
                 <configuration>
                     <serverAddress>localhost</serverAddress>
                     <applicationName>PetDocker</applicationName>
-                    <port>4530</port>
+                    <port>4516</port>
                     <deploymentPackageProperties>
                         <orchestrator>
                             <value>parallel-by-deployment-group</value>
